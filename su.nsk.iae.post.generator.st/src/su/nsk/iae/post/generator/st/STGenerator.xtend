@@ -1,12 +1,18 @@
 package su.nsk.iae.post.generator.st
 
+import java.io.File
+import java.util.LinkedHashMap
 import java.util.LinkedList
 import java.util.List
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
+import org.eclipse.xtext.generator.JavaIoFileSystemAccess
+import com.google.inject.Injector
 import su.nsk.iae.post.IDsmExecutor
+import su.nsk.iae.post.PoSTStandaloneSetup
+//import su.nsk.iae.post.deserialization.ModelDeserializer
 import su.nsk.iae.post.generator.IPoSTGenerator
 import su.nsk.iae.post.generator.st.common.ProgramGenerator
 import su.nsk.iae.post.generator.st.common.vars.GlobalVarHelper
@@ -32,16 +38,35 @@ import static extension org.eclipse.xtext.EcoreUtil2.*
 
 class STGenerator implements IPoSTGenerator, IDsmExecutor {
 
+	String DSM_DIRECTORY = "st"
 	ConfigurationGenerator configuration = null
 	VarHelper globVarList = new GlobalVarHelper
 	List<ProgramGenerator> programs = new LinkedList
 	
-	override String execute(Object request) {
-		var req = request as DsmRequestBody
-		return "'Executed' for request: " + req
-//		beforeGenerate(resource, fsa, context)
-//		doGenerate(resource, fsa, context)
-//		afterGenerate(resource, fsa, context)
+	override String execute(LinkedHashMap<String, Object> request) {
+		var id = request.get("id")
+		var root = request.get("root")
+		var fileName = request.get("fileName")
+		var ast = request.get("ast")
+		
+		System.out.println("id = " + id)
+		System.out.println("root = " + root)
+		System.out.println("fileName = " + fileName)
+		System.out.println("ast = " + ast)
+
+		var Injector injector = PoSTStandaloneSetup.getInjector()
+		var JavaIoFileSystemAccess fsa = injector.getInstance(typeof(JavaIoFileSystemAccess))
+//		var Resource resource = ModelDeserializer.deserializeFromXMI(ast)
+		var Resource resource = null
+		var IGeneratorContext context = new NullGeneratorContext()
+		var String generated = root + File.separator + DSM_DIRECTORY + File.separator + fileName
+		fsa.setOutputPath(generated)
+
+		beforeGenerate(resource, fsa, context)
+		doGenerate(resource, fsa, context)
+		afterGenerate(resource, fsa, context)
+		
+		return "Executed for request: " + request
 	}
 
 	override setModel(Model model) {
