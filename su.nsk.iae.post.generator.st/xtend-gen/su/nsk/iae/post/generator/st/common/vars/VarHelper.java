@@ -114,23 +114,13 @@ public abstract class VarHelper {
           }
         } else {
           StringConcatenation _builder = new StringConcatenation();
-          _builder.append("ARRAY [*] OF ");
-          String _type = v.getArrSpec().getInit().getType();
-          _builder.append(_type);
+          _builder.append("ARRAY [*] OF �v.arrSpec.init.type�");
           String type_2 = _builder.toString();
           ArrayInterval _interval = v.getArrSpec().getInit().getInterval();
           boolean _tripleNotEquals_3 = (_interval != null);
           if (_tripleNotEquals_3) {
             StringConcatenation _builder_1 = new StringConcatenation();
-            _builder_1.append("ARRAY [");
-            String _generateExpression = GeneratorUtil.generateExpression(v.getArrSpec().getInit().getInterval().getStart());
-            _builder_1.append(_generateExpression);
-            _builder_1.append("..");
-            String _generateExpression_1 = GeneratorUtil.generateExpression(v.getArrSpec().getInit().getInterval().getEnd());
-            _builder_1.append(_generateExpression_1);
-            _builder_1.append("] OF ");
-            String _type_1 = v.getArrSpec().getInit().getType();
-            _builder_1.append(_type_1);
+            _builder_1.append("ARRAY [�v.arrSpec.init.interval.start.generateExpression�..�v.arrSpec.init.interval.end.generateExpression�] OF �v.arrSpec.init.type�");
             type_2 = _builder_1.toString();
           }
           List<String> values = null;

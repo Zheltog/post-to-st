@@ -1,13 +1,10 @@
 package su.nsk.iae.post.generator.st.common;
 
-import com.google.common.base.Objects;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.eclipse.xtend2.lib.StringConcatenation;
-import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import su.nsk.iae.post.generator.st.common.util.GeneratorUtil;
 import su.nsk.iae.post.generator.st.common.vars.InputOutputVarHelper;
 import su.nsk.iae.post.generator.st.common.vars.InputVarHelper;
@@ -15,7 +12,6 @@ import su.nsk.iae.post.generator.st.common.vars.OutputVarHelper;
 import su.nsk.iae.post.generator.st.common.vars.SimpleVarHelper;
 import su.nsk.iae.post.generator.st.common.vars.TempVarHelper;
 import su.nsk.iae.post.generator.st.common.vars.VarHelper;
-import su.nsk.iae.post.generator.st.common.vars.data.VarData;
 import su.nsk.iae.post.poST.InputOutputVarDeclaration;
 import su.nsk.iae.post.poST.InputVarDeclaration;
 import su.nsk.iae.post.poST.OutputVarDeclaration;
@@ -60,25 +56,20 @@ public class ProcessGenerator {
   
   public String generateBody() {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("CASE ");
-    String _generateEnumName = GeneratorUtil.generateEnumName(this);
-    _builder.append(_generateEnumName);
-    _builder.append(" OF");
-    _builder.newLineIfNotEmpty();
-    {
-      for(final StateGenerator s : this.stateList) {
-        _builder.append("\t");
-        String _generateEnumStateConstant = GeneratorUtil.generateEnumStateConstant(this, s.getName());
-        _builder.append(_generateEnumStateConstant, "\t");
-        _builder.append(":");
-        _builder.newLineIfNotEmpty();
-        _builder.append("\t");
-        _builder.append("\t");
-        String _generateBody = s.generateBody();
-        _builder.append(_generateBody, "\t\t");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("CASE �generateEnumName� OF");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�FOR s : stateList�");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("�generateEnumStateConstant(s.name)�:");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("�s.generateBody�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�ENDFOR�");
+    _builder.newLine();
     _builder.append("END_CASE");
     _builder.newLine();
     return _builder.toString();
@@ -95,29 +86,10 @@ public class ProcessGenerator {
   
   public String generateSetState(final String stateName) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      final Function1<StateGenerator, Boolean> _function = (StateGenerator it) -> {
-        String _name = it.getName();
-        return Boolean.valueOf(Objects.equal(_name, stateName));
-      };
-      boolean _hasTimeout = IterableExtensions.<StateGenerator>findFirst(this.stateList, _function).hasTimeout();
-      if (_hasTimeout) {
-        String _generateTimeoutName = GeneratorUtil.generateTimeoutName(this);
-        _builder.append(_generateTimeoutName);
-        _builder.append(" := ");
-        String _generateGlobalTime = GeneratorUtil.generateGlobalTime();
-        _builder.append(_generateGlobalTime);
-        _builder.append(";");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    String _generateEnumName = GeneratorUtil.generateEnumName(this);
-    _builder.append(_generateEnumName);
-    _builder.append(" := ");
-    String _generateEnumStateConstant = GeneratorUtil.generateEnumStateConstant(this, stateName);
-    _builder.append(_generateEnumStateConstant);
-    _builder.append(";");
-    _builder.newLineIfNotEmpty();
+    _builder.append("�IF stateList.findFirst[name == stateName].hasTimeout��generateTimeoutName� := �generateGlobalTime�;�ENDIF�");
+    _builder.newLine();
+    _builder.append("�generateEnumName� := �generateEnumStateConstant(stateName)�;");
+    _builder.newLine();
     return _builder.toString();
   }
   
@@ -131,88 +103,40 @@ public class ProcessGenerator {
       int _plus_1 = (_indexOf_1 + 1);
       final StateGenerator s = this.stateList.get(_plus_1);
       StringConcatenation _builder = new StringConcatenation();
-      {
-        boolean _hasTimeout = s.hasTimeout();
-        if (_hasTimeout) {
-          String _generateTimeoutName = GeneratorUtil.generateTimeoutName(this);
-          _builder.append(_generateTimeoutName);
-          _builder.append(" := ");
-          String _generateGlobalTime = GeneratorUtil.generateGlobalTime();
-          _builder.append(_generateGlobalTime);
-          _builder.append(";");
-        }
-      }
-      _builder.newLineIfNotEmpty();
-      String _generateEnumName = GeneratorUtil.generateEnumName(this);
-      _builder.append(_generateEnumName);
-      _builder.append(" := ");
-      String _generateEnumStateConstant = GeneratorUtil.generateEnumStateConstant(this, s.getName());
-      _builder.append(_generateEnumStateConstant);
-      _builder.append(";");
-      _builder.newLineIfNotEmpty();
+      _builder.append("�IF s.hasTimeout��generateTimeoutName� := �generateGlobalTime�;�ENDIF�");
+      _builder.newLine();
+      _builder.append("�generateEnumName� := �generateEnumStateConstant(s.name)�;");
+      _builder.newLine();
       return _builder.toString();
     }
     final StateGenerator s_1 = this.stateList.get(0);
     StringConcatenation _builder_1 = new StringConcatenation();
-    {
-      boolean _hasTimeout_1 = s_1.hasTimeout();
-      if (_hasTimeout_1) {
-        String _generateTimeoutName_1 = GeneratorUtil.generateTimeoutName(this);
-        _builder_1.append(_generateTimeoutName_1);
-        _builder_1.append(" := ");
-        String _generateGlobalTime_1 = GeneratorUtil.generateGlobalTime();
-        _builder_1.append(_generateGlobalTime_1);
-        _builder_1.append(";");
-      }
-    }
-    _builder_1.newLineIfNotEmpty();
-    String _generateEnumName_1 = GeneratorUtil.generateEnumName(this);
-    _builder_1.append(_generateEnumName_1);
-    _builder_1.append(" := ");
-    String _generateEnumStateConstant_1 = GeneratorUtil.generateEnumStateConstant(this, s_1.getName());
-    _builder_1.append(_generateEnumStateConstant_1);
-    _builder_1.append(";");
-    _builder_1.newLineIfNotEmpty();
+    _builder_1.append("�IF s.hasTimeout��generateTimeoutName� := �generateGlobalTime�;�ENDIF�");
+    _builder_1.newLine();
+    _builder_1.append("�generateEnumName� := �generateEnumStateConstant(s.name)�;");
+    _builder_1.newLine();
     return _builder_1.toString();
   }
   
   public String generateStart() {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      List<VarData> _list = this.varList.getList();
-      for(final VarData v : _list) {
-        {
-          if (((v.getValue() != null) && (!v.isConstant()))) {
-            String _generateVarName = GeneratorUtil.generateVarName(this, v.getName());
-            _builder.append(_generateVarName);
-            _builder.append(" := ");
-            String _value = v.getValue();
-            _builder.append(_value);
-            _builder.append(";");
-            _builder.newLineIfNotEmpty();
-          }
-        }
-      }
-    }
-    {
-      boolean _hasTimeout = this.stateList.get(0).hasTimeout();
-      if (_hasTimeout) {
-        String _generateTimeoutName = GeneratorUtil.generateTimeoutName(this);
-        _builder.append(_generateTimeoutName);
-        _builder.append(" := ");
-        String _generateGlobalTime = GeneratorUtil.generateGlobalTime();
-        _builder.append(_generateGlobalTime);
-        _builder.append(";");
-      }
-    }
-    _builder.newLineIfNotEmpty();
-    String _generateEnumName = GeneratorUtil.generateEnumName(this);
-    _builder.append(_generateEnumName);
-    _builder.append(" := ");
-    String _generateEnumStateConstant = GeneratorUtil.generateEnumStateConstant(this, this.stateList.get(0).getName());
-    _builder.append(_generateEnumStateConstant);
-    _builder.append(";");
-    _builder.newLineIfNotEmpty();
+    _builder.append("�FOR v : varList.list�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�IF v.value !== null && ! v.isConstant�");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("�generateVarName(v.name)� := �v.value�;");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�ENDIF�");
+    _builder.newLine();
+    _builder.append("�ENDFOR�");
+    _builder.newLine();
+    _builder.append("�IF stateList.get(0).hasTimeout��generateTimeoutName� := �generateGlobalTime�;�ENDIF�");
+    _builder.newLine();
+    _builder.append("�generateEnumName� := �generateEnumStateConstant(stateList.get(0).name)�;");
+    _builder.newLine();
     return _builder.toString();
   }
   

@@ -16,7 +16,6 @@ import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
 import su.nsk.iae.post.generator.IPoSTGenerator;
 import su.nsk.iae.post.generator.plcopen.xml.common.ProgramGenerator;
-import su.nsk.iae.post.generator.plcopen.xml.common.util.GeneratorUtil;
 import su.nsk.iae.post.generator.plcopen.xml.common.vars.GlobalVarHelper;
 import su.nsk.iae.post.generator.plcopen.xml.common.vars.VarHelper;
 import su.nsk.iae.post.generator.plcopen.xml.configuration.ConfigurationGenerator;
@@ -112,36 +111,33 @@ public class XMLGenerator implements IPoSTGenerator {
   
   private void generateSingleFile(final IFileSystemAccess2 fsa, final String path) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append(path);
-    _builder.append("poST_code.xml");
+    _builder.append("�path�poST_code.xml");
     fsa.generateFile(_builder.toString(), this.generateSingleXMLFile());
   }
   
   private String generateSingleXMLFile() {
     StringConcatenation _builder = new StringConcatenation();
-    String _generateXMLStart = GeneratorUtil.generateXMLStart();
-    _builder.append(_generateXMLStart);
-    _builder.newLineIfNotEmpty();
-    {
-      for(final ProgramGenerator c : this.programs) {
-        String _generateProgram = c.generateProgram();
-        _builder.append(_generateProgram);
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    {
-      boolean _isEmpty = this.globVarList.getList().isEmpty();
-      boolean _not = (!_isEmpty);
-      if (_not) {
-        String _generateXMLEndWithGlobalVars = GeneratorUtil.generateXMLEndWithGlobalVars(this.globVarList);
-        _builder.append(_generateXMLEndWithGlobalVars);
-        _builder.newLineIfNotEmpty();
-      } else {
-        String _generateXMLEnd = GeneratorUtil.generateXMLEnd();
-        _builder.append(_generateXMLEnd);
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("�generateXMLStart�");
+    _builder.newLine();
+    _builder.append("�FOR c : programs�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�c.generateProgram�");
+    _builder.newLine();
+    _builder.append("�ENDFOR�");
+    _builder.newLine();
+    _builder.append("�IF !globVarList.list.empty�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�globVarList.generateXMLEndWithGlobalVars�");
+    _builder.newLine();
+    _builder.append("�ELSE�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�generateXMLEnd�");
+    _builder.newLine();
+    _builder.append("�ENDIF�");
+    _builder.newLine();
     return _builder.toString();
   }
   

@@ -1,9 +1,7 @@
 package su.nsk.iae.post.generator.plcopen.xml.common;
 
 import org.eclipse.xtend2.lib.StringConcatenation;
-import su.nsk.iae.post.generator.plcopen.xml.common.util.GeneratorUtil;
 import su.nsk.iae.post.poST.State;
-import su.nsk.iae.post.poST.SymbolicVariable;
 import su.nsk.iae.post.poST.TimeoutStatement;
 
 @SuppressWarnings("all")
@@ -23,18 +21,15 @@ public class StateGenerator {
   
   public String generateBody() {
     StringConcatenation _builder = new StringConcatenation();
-    String _generateStatementList = this.statementList.generateStatementList(this.state.getStatement());
-    _builder.append(_generateStatementList);
-    _builder.newLineIfNotEmpty();
-    {
-      TimeoutStatement _timeout = this.state.getTimeout();
-      boolean _tripleNotEquals = (_timeout != null);
-      if (_tripleNotEquals) {
-        String _generateTimeout = this.generateTimeout();
-        _builder.append(_generateTimeout);
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("�statementList.generateStatementList(state.statement)�");
+    _builder.newLine();
+    _builder.append("�IF state.timeout !== null�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�generateTimeout�");
+    _builder.newLine();
+    _builder.append("�ENDIF�");
+    _builder.newLine();
     return _builder.toString();
   }
   
@@ -49,30 +44,11 @@ public class StateGenerator {
   
   private String generateTimeout() {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("IF (");
-    String _generateGlobalTime = GeneratorUtil.generateGlobalTime();
-    _builder.append(_generateGlobalTime);
-    _builder.append(" - ");
-    String _generateTimeoutName = GeneratorUtil.generateTimeoutName(this.process);
-    _builder.append(_generateTimeoutName);
-    _builder.append(") &gt;= ");
-    {
-      SymbolicVariable _variable = this.state.getTimeout().getVariable();
-      boolean _tripleNotEquals = (_variable != null);
-      if (_tripleNotEquals) {
-        String _generateVar = this.statementList.generateVar(this.state.getTimeout().getVariable());
-        _builder.append(_generateVar);
-      } else {
-        String _generateConstant = GeneratorUtil.generateConstant(this.state.getTimeout().getConst());
-        _builder.append(_generateConstant);
-      }
-    }
-    _builder.append(" THEN");
-    _builder.newLineIfNotEmpty();
+    _builder.append("IF (�generateGlobalTime� - �process.generateTimeoutName�) &gt;= �IF state.timeout.variable !== null��statementList.generateVar(state.timeout.variable)��ELSE��state.timeout.const.generateConstant��ENDIF� THEN");
+    _builder.newLine();
     _builder.append("\t");
-    String _generateStatementList = this.statementList.generateStatementList(this.state.getTimeout().getStatement());
-    _builder.append(_generateStatementList, "\t");
-    _builder.newLineIfNotEmpty();
+    _builder.append("�statementList.generateStatementList(state.timeout.statement)�");
+    _builder.newLine();
     _builder.append("END_IF");
     _builder.newLine();
     return _builder.toString();

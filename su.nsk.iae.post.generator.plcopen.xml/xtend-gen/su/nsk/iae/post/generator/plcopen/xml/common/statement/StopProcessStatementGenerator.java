@@ -5,10 +5,8 @@ import su.nsk.iae.post.generator.plcopen.xml.common.ProcessGenerator;
 import su.nsk.iae.post.generator.plcopen.xml.common.ProgramGenerator;
 import su.nsk.iae.post.generator.plcopen.xml.common.StateGenerator;
 import su.nsk.iae.post.generator.plcopen.xml.common.StatementListGenerator;
-import su.nsk.iae.post.generator.plcopen.xml.common.util.GeneratorUtil;
 import su.nsk.iae.post.poST.Statement;
 import su.nsk.iae.post.poST.StopProcessStatement;
-import su.nsk.iae.post.poST.Variable;
 
 @SuppressWarnings("all")
 public class StopProcessStatementGenerator extends IStatementGenerator {
@@ -25,21 +23,7 @@ public class StopProcessStatementGenerator extends IStatementGenerator {
   public String generateStatement(final Statement statement) {
     final StopProcessStatement s = ((StopProcessStatement) statement);
     StringConcatenation _builder = new StringConcatenation();
-    {
-      Variable _process = s.getProcess();
-      boolean _tripleNotEquals = (_process != null);
-      if (_tripleNotEquals) {
-        String _generateProcessEnum = this.program.generateProcessEnum(s.getProcess().getName());
-        _builder.append(_generateProcessEnum);
-      } else {
-        String _generateEnumName = GeneratorUtil.generateEnumName(this.process);
-        _builder.append(_generateEnumName);
-      }
-    }
-    _builder.append(" := ");
-    String _generateStopConstant = GeneratorUtil.generateStopConstant();
-    _builder.append(_generateStopConstant);
-    _builder.append(";");
+    _builder.append("�IF s.process !== null��program.generateProcessEnum(s.process.name)��ELSE��process.generateEnumName��ENDIF� := �generateStopConstant�;");
     return _builder.toString();
   }
 }

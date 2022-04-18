@@ -23,15 +23,11 @@ public class WhileStatementGenerator extends IStatementGenerator {
   public String generateStatement(final Statement statement) {
     final WhileStatement s = ((WhileStatement) statement);
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("WHILE ");
-    String _generateExpression = this.context.generateExpression(s.getCond());
-    _builder.append(_generateExpression);
-    _builder.append(" DO");
-    _builder.newLineIfNotEmpty();
+    _builder.append("WHILE �context.generateExpression(s.cond)� DO");
+    _builder.newLine();
     _builder.append("\t");
-    String _generateStatementList = this.context.generateStatementList(s.getStatement());
-    _builder.append(_generateStatementList, "\t");
-    _builder.newLineIfNotEmpty();
+    _builder.append("�context.generateStatementList(s.statement)�");
+    _builder.newLine();
     _builder.append("END_WHILE");
     _builder.newLine();
     return _builder.toString();

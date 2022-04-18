@@ -26,14 +26,10 @@ public class RepeatStatementGenerator extends IStatementGenerator {
     _builder.append("REPEAT");
     _builder.newLine();
     _builder.append("\t");
-    String _generateStatementList = this.context.generateStatementList(s.getStatement());
-    _builder.append(_generateStatementList, "\t");
-    _builder.newLineIfNotEmpty();
-    _builder.append("UNTIL ");
-    String _generateExpression = this.context.generateExpression(s.getCond());
-    _builder.append(_generateExpression);
-    _builder.append(" END_REPEAT");
-    _builder.newLineIfNotEmpty();
+    _builder.append("�context.generateStatementList(s.statement)�");
+    _builder.newLine();
+    _builder.append("UNTIL �context.generateExpression(s.cond)� END_REPEAT");
+    _builder.newLine();
     return _builder.toString();
   }
 }

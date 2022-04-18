@@ -14,15 +14,7 @@ public class ProgramConfigurationGenerator {
   
   public String generateProgramConfiguration() {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("PROGRAM ");
-    String _name = this.programConf.getName();
-    _builder.append(_name);
-    String _generateTask = this.generateTask();
-    _builder.append(_generateTask);
-    _builder.append(" : ");
-    String _capitalizeFirst = this.capitalizeFirst(this.programConf.getName());
-    _builder.append(_capitalizeFirst);
-    _builder.append(";");
+    _builder.append("PROGRAM �programConf.name��generateTask� : �programConf.name.capitalizeFirst�;");
     return _builder.toString();
   }
   
@@ -32,9 +24,7 @@ public class ProgramConfigurationGenerator {
     if (_tripleNotEquals) {
       StringConcatenation _builder = new StringConcatenation();
       _builder.append(" ");
-      _builder.append("WITH ");
-      String _name = this.programConf.getTask().getName();
-      _builder.append(_name, " ");
+      _builder.append("WITH �programConf.task.name�");
       return _builder.toString();
     }
     StringConcatenation _builder_1 = new StringConcatenation();

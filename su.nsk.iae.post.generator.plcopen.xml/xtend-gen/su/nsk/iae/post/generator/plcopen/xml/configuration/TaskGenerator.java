@@ -13,14 +13,8 @@ public class TaskGenerator {
   
   public String generateTask() {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<task name=\"");
-    String _name = this.task.getName();
-    _builder.append(_name);
-    _builder.append("\" interval=\"PT0.01S\" priority=\"");
-    String _priority = this.task.getInit().getPriority();
-    _builder.append(_priority);
-    _builder.append("\">");
-    _builder.newLineIfNotEmpty();
+    _builder.append("<task name=\"�task.name�\" interval=\"PT0.01S\" priority=\"�task.init.priority�\">");
+    _builder.newLine();
     return _builder.toString();
   }
 }

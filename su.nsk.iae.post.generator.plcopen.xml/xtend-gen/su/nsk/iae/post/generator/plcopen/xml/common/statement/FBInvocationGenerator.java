@@ -23,12 +23,7 @@ public class FBInvocationGenerator extends IStatementGenerator {
   public String generateStatement(final Statement statement) {
     final FBInvocation s = ((FBInvocation) statement);
     StringConcatenation _builder = new StringConcatenation();
-    String _name = s.getFb().getName();
-    _builder.append(_name);
-    _builder.append("(");
-    String _generateParamAssignmentElements = this.context.generateParamAssignmentElements(s.getArgs());
-    _builder.append(_generateParamAssignmentElements);
-    _builder.append(")");
+    _builder.append("�s.fb.name�(�context.generateParamAssignmentElements(s.args)�)");
     return _builder.toString();
   }
 }

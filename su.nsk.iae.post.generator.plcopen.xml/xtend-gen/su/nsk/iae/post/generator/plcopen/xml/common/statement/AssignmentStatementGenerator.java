@@ -27,21 +27,11 @@ public class AssignmentStatementGenerator extends IStatementGenerator {
     boolean _tripleNotEquals = (_variable != null);
     if (_tripleNotEquals) {
       StringConcatenation _builder = new StringConcatenation();
-      String _generateVar = this.context.generateVar(s.getVariable());
-      _builder.append(_generateVar);
-      _builder.append(" := ");
-      String _generateExpression = this.context.generateExpression(s.getValue());
-      _builder.append(_generateExpression);
-      _builder.append(";");
+      _builder.append("�context.generateVar(s.variable)� := �context.generateExpression(s.value)�;");
       return _builder.toString();
     }
     StringConcatenation _builder_1 = new StringConcatenation();
-    String _generateArray = this.context.generateArray(s.getArray());
-    _builder_1.append(_generateArray);
-    _builder_1.append(" := ");
-    String _generateExpression_1 = this.context.generateExpression(s.getValue());
-    _builder_1.append(_generateExpression_1);
-    _builder_1.append(";");
+    _builder_1.append("�context.generateArray(s.array)� := �context.generateExpression(s.value)�;");
     return _builder_1.toString();
   }
 }

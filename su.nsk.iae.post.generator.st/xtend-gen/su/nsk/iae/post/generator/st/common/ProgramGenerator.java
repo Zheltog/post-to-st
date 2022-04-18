@@ -49,10 +49,7 @@ public class ProgramGenerator {
   
   public void generate(final IFileSystemAccess2 fsa, final String path) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append(path);
-    String _lowerCase = this.programName.toLowerCase();
-    _builder.append(_lowerCase);
-    _builder.append(".st");
+    _builder.append("�path��programName.toLowerCase�.st");
     fsa.generateFile(_builder.toString(), this.generateProgram());
   }
   
@@ -63,50 +60,43 @@ public class ProgramGenerator {
   
   public String generateBody() {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append(this.type);
-    _builder.append(" ");
-    _builder.append(this.programName);
-    _builder.newLineIfNotEmpty();
+    _builder.append("�type� �programName�");
     _builder.newLine();
-    {
-      if ((!this.templateProcess)) {
-        String _generateVars = GeneratorUtil.generateVars(this.inVarList);
-        _builder.append(_generateVars);
-        _builder.newLineIfNotEmpty();
-        String _generateVars_1 = GeneratorUtil.generateVars(this.outVarList);
-        _builder.append(_generateVars_1);
-        _builder.newLineIfNotEmpty();
-        String _generateVars_2 = GeneratorUtil.generateVars(this.inOutVarList);
-        _builder.append(_generateVars_2);
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    String _generateVars_3 = GeneratorUtil.generateVars(this.externalVarList);
-    _builder.append(_generateVars_3);
-    _builder.newLineIfNotEmpty();
-    String _generateVars_4 = GeneratorUtil.generateVars(this.varList);
-    _builder.append(_generateVars_4);
-    _builder.newLineIfNotEmpty();
-    String _generateVars_5 = GeneratorUtil.generateVars(this.tempVarList);
-    _builder.append(_generateVars_5);
-    _builder.newLineIfNotEmpty();
     _builder.newLine();
-    String _generateGlobalTime = GeneratorUtil.generateGlobalTime();
-    _builder.append(_generateGlobalTime);
-    _builder.append(" := TIME();");
-    _builder.newLineIfNotEmpty();
+    _builder.append("�IF !templateProcess�");
     _builder.newLine();
-    {
-      for(final ProcessGenerator p : this.processList) {
-        String _generateBody = p.generateBody();
-        _builder.append(_generateBody);
-        _builder.newLineIfNotEmpty();
-        _builder.newLine();
-      }
-    }
-    _builder.append("END_");
-    _builder.append(this.type);
-    _builder.newLineIfNotEmpty();
+    _builder.append("\t");
+    _builder.append("�inVarList.generateVars�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�outVarList.generateVars�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�inOutVarList.generateVars�");
+    _builder.newLine();
+    _builder.append("�ENDIF�");
+    _builder.newLine();
+    _builder.append("�externalVarList.generateVars�");
+    _builder.newLine();
+    _builder.append("�varList.generateVars�");
+    _builder.newLine();
+    _builder.append("�tempVarList.generateVars�");
+    _builder.newLine();
+    _builder.newLine();
+    _builder.append("�generateGlobalTime� := TIME();");
+    _builder.newLine();
+    _builder.newLine();
+    _builder.append("�FOR p : processList�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�p.generateBody�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.newLine();
+    _builder.append("�ENDFOR�");
+    _builder.newLine();
+    _builder.append("END_�type�");
+    _builder.newLine();
     return _builder.toString();
   }
   

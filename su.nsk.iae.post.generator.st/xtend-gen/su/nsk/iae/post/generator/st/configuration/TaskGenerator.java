@@ -1,7 +1,6 @@
 package su.nsk.iae.post.generator.st.configuration;
 
 import org.eclipse.xtend2.lib.StringConcatenation;
-import su.nsk.iae.post.generator.st.common.util.GeneratorUtil;
 import su.nsk.iae.post.poST.Constant;
 import su.nsk.iae.post.poST.Task;
 import su.nsk.iae.post.poST.TaskInitialization;
@@ -16,16 +15,7 @@ public class TaskGenerator {
   
   public String generateTask() {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("TASK ");
-    String _name = this.task.getName();
-    _builder.append(_name);
-    _builder.append(" (");
-    String _generateFirstArg = this.generateFirstArg();
-    _builder.append(_generateFirstArg);
-    _builder.append(", PRIORITY := ");
-    String _priority = this.task.getInit().getPriority();
-    _builder.append(_priority);
-    _builder.append(");");
+    _builder.append("TASK �task.name� (�generateFirstArg�, PRIORITY := �task.init.priority�);");
     return _builder.toString();
   }
   
@@ -35,15 +25,11 @@ public class TaskGenerator {
     boolean _tripleNotEquals = (_interval != null);
     if (_tripleNotEquals) {
       StringConcatenation _builder = new StringConcatenation();
-      _builder.append("INTERVAL := ");
-      String _generateConstant = GeneratorUtil.generateConstant(init.getInterval());
-      _builder.append(_generateConstant);
+      _builder.append("INTERVAL := �init.interval.generateConstant�");
       return _builder.toString();
     }
     StringConcatenation _builder_1 = new StringConcatenation();
-    _builder_1.append("SINGLE := ");
-    String _generateConstant_1 = GeneratorUtil.generateConstant(init.getSingle());
-    _builder_1.append(_generateConstant_1);
+    _builder_1.append("SINGLE := �init.single.generateConstant�");
     return _builder_1.toString();
   }
 }

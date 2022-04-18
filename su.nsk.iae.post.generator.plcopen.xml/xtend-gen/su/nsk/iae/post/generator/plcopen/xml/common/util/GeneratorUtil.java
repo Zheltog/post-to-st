@@ -1,9 +1,7 @@
 package su.nsk.iae.post.generator.plcopen.xml.common.util;
 
-import com.google.common.base.Objects;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.eclipse.xtend2.lib.StringConcatenation;
@@ -12,12 +10,9 @@ import su.nsk.iae.post.generator.plcopen.xml.common.ProcessGenerator;
 import su.nsk.iae.post.generator.plcopen.xml.common.vars.VarHelper;
 import su.nsk.iae.post.generator.plcopen.xml.common.vars.data.VarData;
 import su.nsk.iae.post.poST.AddExpression;
-import su.nsk.iae.post.poST.AddOperator;
 import su.nsk.iae.post.poST.AndExpression;
 import su.nsk.iae.post.poST.ArrayVariable;
-import su.nsk.iae.post.poST.AssignmentType;
 import su.nsk.iae.post.poST.CompExpression;
-import su.nsk.iae.post.poST.CompOperator;
 import su.nsk.iae.post.poST.Constant;
 import su.nsk.iae.post.poST.EquExpression;
 import su.nsk.iae.post.poST.EquOperator;
@@ -37,7 +32,6 @@ import su.nsk.iae.post.poST.SignedInteger;
 import su.nsk.iae.post.poST.SymbolicVariable;
 import su.nsk.iae.post.poST.TimeLiteral;
 import su.nsk.iae.post.poST.UnaryExpression;
-import su.nsk.iae.post.poST.UnaryOperator;
 import su.nsk.iae.post.poST.XorExpression;
 
 @SuppressWarnings("all")
@@ -62,49 +56,31 @@ public class GeneratorUtil {
   
   public static String generateVarName(final String process, final String variable) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("_p_");
-    _builder.append(process);
-    _builder.append("_v_");
-    _builder.append(variable);
+    _builder.append("_p_�process�_v_�variable�");
     return _builder.toString();
   }
   
   public static String generateVarName(final ProcessGenerator process, final String variable) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("_p_");
-    String _name = process.getName();
-    _builder.append(_name);
-    _builder.append("_v_");
-    _builder.append(variable);
+    _builder.append("_p_�process.name�_v_�variable�");
     return _builder.toString();
   }
   
   public static String generateTimeoutName(final ProcessGenerator process) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("_g_p_");
-    String _name = process.getName();
-    _builder.append(_name);
-    _builder.append("_time");
+    _builder.append("_g_p_�process.name�_time");
     return _builder.toString();
   }
   
   public static String generateEnumName(final ProcessGenerator process) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("_g_p_");
-    String _name = process.getName();
-    _builder.append(_name);
-    _builder.append("_state");
+    _builder.append("_g_p_�process.name�_state");
     return _builder.toString();
   }
   
   public static String generateEnumStateConstant(final ProcessGenerator process, final String name) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("_P_");
-    String _upperCase = process.getName().toUpperCase();
-    _builder.append(_upperCase);
-    _builder.append("_S_");
-    String _upperCase_1 = name.toUpperCase();
-    _builder.append(_upperCase_1);
+    _builder.append("_P_�process.name.toUpperCase�_S_�name.toUpperCase�");
     return _builder.toString();
   }
   
@@ -115,47 +91,19 @@ public class GeneratorUtil {
       final NumericLiteral num = constant.getNum();
       if ((num instanceof IntegerLiteral)) {
         StringConcatenation _builder = new StringConcatenation();
-        {
-          String _type = ((IntegerLiteral)num).getType();
-          boolean _tripleNotEquals_1 = (_type != null);
-          if (_tripleNotEquals_1) {
-            String _type_1 = ((IntegerLiteral)num).getType();
-            _builder.append(_type_1);
-            _builder.append("#");
-          }
-        }
-        String _generateSignedInteger = GeneratorUtil.generateSignedInteger(((IntegerLiteral)num).getValue());
-        _builder.append(_generateSignedInteger);
+        _builder.append("�IF num.type !== null��num.type�#�ENDIF��num.value.generateSignedInteger�");
         return _builder.toString();
       }
       final RealLiteral dNum = ((RealLiteral) num);
       StringConcatenation _builder_1 = new StringConcatenation();
-      {
-        String _type_2 = dNum.getType();
-        boolean _tripleNotEquals_2 = (_type_2 != null);
-        if (_tripleNotEquals_2) {
-          String _type_3 = dNum.getType();
-          _builder_1.append(_type_3);
-          _builder_1.append("#");
-        }
-      }
-      {
-        boolean _isRSig = dNum.isRSig();
-        if (_isRSig) {
-          _builder_1.append("-");
-        }
-      }
-      String _value = dNum.getValue();
-      _builder_1.append(_value);
+      _builder_1.append("�IF dNum.type !== null��dNum.type�#�ENDIF��IF dNum.RSig�-�ENDIF��dNum.value�");
       return _builder_1.toString();
     }
     TimeLiteral _time = constant.getTime();
-    boolean _tripleNotEquals_3 = (_time != null);
-    if (_tripleNotEquals_3) {
+    boolean _tripleNotEquals_1 = (_time != null);
+    if (_tripleNotEquals_1) {
       StringConcatenation _builder_2 = new StringConcatenation();
-      _builder_2.append("T#");
-      String _interval = constant.getTime().getInterval();
-      _builder_2.append(_interval);
+      _builder_2.append("T#�constant.time.interval�");
       return _builder_2.toString();
     }
     return constant.getOth();
@@ -163,14 +111,7 @@ public class GeneratorUtil {
   
   public static String generateSignedInteger(final SignedInteger sint) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      boolean _isISig = sint.isISig();
-      if (_isISig) {
-        _builder.append("-");
-      }
-    }
-    String _value = sint.getValue();
-    _builder.append(_value);
+    _builder.append("�IF sint.ISig�-�ENDIF��sint.value�");
     return _builder.toString();
   }
   
@@ -180,164 +121,122 @@ public class GeneratorUtil {
   
   public static String generateVars(final VarHelper varHelper, final String name) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      boolean _isEmpty = varHelper.getList().isEmpty();
-      boolean _not = (!_isEmpty);
-      if (_not) {
-        {
-          boolean _hasConstant = varHelper.hasConstant();
-          if (_hasConstant) {
-            _builder.append("<");
-            String _type = varHelper.getType();
-            _builder.append(_type);
-            {
-              if ((name != null)) {
-                _builder.append(" name=\"");
-                _builder.append(name);
-                _builder.append("\"");
-              }
-            }
-            _builder.append(" constant=\"true\">");
-            _builder.newLineIfNotEmpty();
-            {
-              List<VarData> _list = varHelper.getList();
-              for(final VarData v : _list) {
-                {
-                  boolean _isConstant = v.isConstant();
-                  if (_isConstant) {
-                    _builder.append("\t");
-                    String _generateSingleDeclaration = GeneratorUtil.generateSingleDeclaration(v);
-                    _builder.append(_generateSingleDeclaration, "\t");
-                    _builder.newLineIfNotEmpty();
-                  }
-                }
-              }
-            }
-            _builder.append("</");
-            String _type_1 = varHelper.getType();
-            _builder.append(_type_1);
-            _builder.append(">");
-            _builder.newLineIfNotEmpty();
-          }
-        }
-        {
-          boolean _hasNonConstant = varHelper.hasNonConstant();
-          if (_hasNonConstant) {
-            _builder.append("<");
-            String _type_2 = varHelper.getType();
-            _builder.append(_type_2);
-            {
-              if ((name != null)) {
-                _builder.append(" name=\"");
-                _builder.append(name);
-                _builder.append("\"");
-              }
-            }
-            _builder.append(">");
-            _builder.newLineIfNotEmpty();
-            {
-              List<VarData> _list_1 = varHelper.getList();
-              for(final VarData v_1 : _list_1) {
-                {
-                  boolean _isConstant_1 = v_1.isConstant();
-                  boolean _not_1 = (!_isConstant_1);
-                  if (_not_1) {
-                    _builder.append("\t");
-                    String _generateSingleDeclaration_1 = GeneratorUtil.generateSingleDeclaration(v_1);
-                    _builder.append(_generateSingleDeclaration_1, "\t");
-                    _builder.newLineIfNotEmpty();
-                  }
-                }
-              }
-            }
-            _builder.append("</");
-            String _type_3 = varHelper.getType();
-            _builder.append(_type_3);
-            _builder.append(">");
-            _builder.newLineIfNotEmpty();
-          }
-        }
-      }
-    }
+    _builder.append("�IF !varHelper.list.empty�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�IF varHelper.hasConstant�");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("<�varHelper.type��IF name !== null� name=\"�name�\"�ENDIF� constant=\"true\">");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("�FOR v : varHelper.list�");
+    _builder.newLine();
+    _builder.append("\t\t\t\t");
+    _builder.append("�IF v.isConstant�");
+    _builder.newLine();
+    _builder.append("\t\t\t\t\t");
+    _builder.append("�v.generateSingleDeclaration�");
+    _builder.newLine();
+    _builder.append("\t\t\t\t");
+    _builder.append("�ENDIF�");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("�ENDFOR�");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("</�varHelper.type�>");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�ENDIF�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�IF varHelper.hasNonConstant�");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("<�varHelper.type��IF name !== null� name=\"�name�\"�ENDIF�>");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("�FOR v : varHelper.list�");
+    _builder.newLine();
+    _builder.append("\t\t\t\t");
+    _builder.append("�IF !v.isConstant�");
+    _builder.newLine();
+    _builder.append("\t\t\t\t\t");
+    _builder.append("�v.generateSingleDeclaration�");
+    _builder.newLine();
+    _builder.append("\t\t\t\t");
+    _builder.append("�ENDIF�");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("�ENDFOR�");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("</�varHelper.type�>");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�ENDIF�");
+    _builder.newLine();
+    _builder.append("�ENDIF�");
+    _builder.newLine();
     return _builder.toString();
   }
   
   private static String generateSingleDeclaration(final VarData data) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("<variable name=\"");
-    String _name = data.getName();
-    _builder.append(_name);
-    _builder.append("\">");
-    _builder.newLineIfNotEmpty();
+    _builder.append("<variable name=\"�data.name�\">");
+    _builder.newLine();
     _builder.append("\t");
     _builder.append("<type>");
     _builder.newLine();
-    {
-      boolean _isArray = data.isArray();
-      boolean _not = (!_isArray);
-      if (_not) {
-        _builder.append("\t\t");
-        _builder.append("<");
-        String _type = data.getType();
-        _builder.append(_type, "\t\t");
-        _builder.append(" />");
-        _builder.newLineIfNotEmpty();
-      } else {
-        _builder.append("\t\t");
-        _builder.append("<array>");
-        _builder.newLine();
-        _builder.append("\t\t");
-        _builder.append("\t");
-        _builder.append("<dimension lower=\"");
-        String _arrayStart = data.getArrayStart();
-        _builder.append(_arrayStart, "\t\t\t");
-        _builder.append("\" upper=\"");
-        String _arrayEnd = data.getArrayEnd();
-        _builder.append(_arrayEnd, "\t\t\t");
-        _builder.append("\" />");
-        _builder.newLineIfNotEmpty();
-        _builder.append("\t\t");
-        _builder.append("\t");
-        _builder.append("<baseType>");
-        _builder.newLine();
-        _builder.append("\t\t");
-        _builder.append("\t\t");
-        _builder.append("<");
-        String _type_1 = data.getType();
-        _builder.append(_type_1, "\t\t\t\t");
-        _builder.append(" />");
-        _builder.newLineIfNotEmpty();
-        _builder.append("\t\t");
-        _builder.append("\t");
-        _builder.append("</baseType>");
-        _builder.newLine();
-        _builder.append("\t\t");
-        _builder.append("</array>");
-        _builder.newLine();
-      }
-    }
+    _builder.append("\t\t");
+    _builder.append("�IF !data.isArray�");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("<�data.type� />");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("�ELSE�");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("<array>");
+    _builder.newLine();
+    _builder.append("\t\t\t\t");
+    _builder.append("<dimension lower=\"�data.arrayStart�\" upper=\"�data.arrayEnd�\" />");
+    _builder.newLine();
+    _builder.append("\t\t\t\t");
+    _builder.append("<baseType>");
+    _builder.newLine();
+    _builder.append("\t\t\t\t\t");
+    _builder.append("<�data.type� />");
+    _builder.newLine();
+    _builder.append("\t\t\t\t");
+    _builder.append("</baseType>");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("</array>");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("�ENDIF�");
+    _builder.newLine();
     _builder.append("\t");
     _builder.append("</type>");
     _builder.newLine();
-    {
-      String _value = data.getValue();
-      boolean _tripleNotEquals = (_value != null);
-      if (_tripleNotEquals) {
-        _builder.append("\t");
-        _builder.append("<initialValue>");
-        _builder.newLine();
-        _builder.append("\t");
-        _builder.append("\t");
-        _builder.append("<simpleValue value=\"");
-        String _value_1 = data.getValue();
-        _builder.append(_value_1, "\t\t");
-        _builder.append("\" />");
-        _builder.newLineIfNotEmpty();
-        _builder.append("\t");
-        _builder.append("</initialValue>");
-        _builder.newLine();
-      }
-    }
+    _builder.append("\t");
+    _builder.append("�IF data.value !== null�");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("<initialValue>");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("<simpleValue value=\"�data.value�\" />");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("</initialValue>");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�ENDIF�");
+    _builder.newLine();
     _builder.append("</variable>");
     _builder.newLine();
     return _builder.toString();
@@ -350,11 +249,8 @@ public class GeneratorUtil {
     _builder.append("<project xmlns=\"http://www.plcopen.org/xml/tc6_0200\">");
     _builder.newLine();
     _builder.append("\t");
-    _builder.append("<fileHeader companyName=\"\" productName=\"poSTIDE\" productVersion=\"\" creationDateTime=\"");
-    String _generateCurrentTime = GeneratorUtil.generateCurrentTime();
-    _builder.append(_generateCurrentTime, "\t");
-    _builder.append("\" />");
-    _builder.newLineIfNotEmpty();
+    _builder.append("<fileHeader companyName=\"\" productName=\"poSTIDE\" productVersion=\"\" creationDateTime=\"�generateCurrentTime�\" />");
+    _builder.newLine();
     _builder.append("\t");
     _builder.append("<contentHeader name=\"poST.project\">");
     _builder.newLine();
@@ -427,29 +323,27 @@ public class GeneratorUtil {
     _builder.append("\t");
     _builder.append("</instances>");
     _builder.newLine();
-    {
-      if ((globalVars != null)) {
-        _builder.append("\t");
-        _builder.append("<addData>");
-        _builder.newLine();
-        _builder.append("\t");
-        _builder.append("\t");
-        _builder.append("<data name=\"http://www.3s-software.com/plcopenxml/globalvars\" handleUnknown=\"implementation\">");
-        _builder.newLine();
-        _builder.append("\t");
-        _builder.append("\t\t");
-        String _generateGlobalVars = GeneratorUtil.generateGlobalVars(globalVars, "GVL");
-        _builder.append(_generateGlobalVars, "\t\t\t");
-        _builder.newLineIfNotEmpty();
-        _builder.append("\t");
-        _builder.append("\t");
-        _builder.append("</data>");
-        _builder.newLine();
-        _builder.append("\t");
-        _builder.append("</addData>");
-        _builder.newLine();
-      }
-    }
+    _builder.append("\t");
+    _builder.append("�IF globalVars !== null�");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("<addData>");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("<data name=\"http://www.3s-software.com/plcopenxml/globalvars\" handleUnknown=\"implementation\">");
+    _builder.newLine();
+    _builder.append("\t\t\t\t");
+    _builder.append("�generateGlobalVars(globalVars, \"GVL\")�");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("</data>");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("</addData>");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�ENDIF�");
+    _builder.newLine();
     _builder.append("</project>");
     _builder.newLine();
     return _builder.toString();
@@ -457,64 +351,58 @@ public class GeneratorUtil {
   
   private static String generateGlobalVars(final VarHelper varHelper, final String name) {
     StringConcatenation _builder = new StringConcatenation();
-    {
-      boolean _isEmpty = varHelper.getList().isEmpty();
-      boolean _not = (!_isEmpty);
-      if (_not) {
-        _builder.append("<globalVars name=\"");
-        _builder.append(name);
-        _builder.append("\">");
-        _builder.newLineIfNotEmpty();
-        {
-          List<VarData> _list = varHelper.getList();
-          for(final VarData v : _list) {
-            {
-              boolean _isConstant = v.isConstant();
-              if (_isConstant) {
-                _builder.append("\t");
-                String _generateSingleDeclaration = GeneratorUtil.generateSingleDeclaration(v);
-                _builder.append(_generateSingleDeclaration, "\t");
-                _builder.newLineIfNotEmpty();
-              }
-            }
-          }
-        }
-        {
-          boolean _hasConstant = varHelper.hasConstant();
-          if (_hasConstant) {
-            _builder.append("\t");
-            _builder.append("<addData>");
-            _builder.newLine();
-            _builder.append("\t");
-            _builder.append("\t");
-            _builder.append("<data name=\"http://www.3s-software.com/plcopenxml/mixedattrsvarlist\" handleUnknown=\"implementation\">");
-            _builder.newLine();
-            _builder.append("\t");
-            _builder.append("\t\t");
-            _builder.append("<MixedAttrsVarList>");
-            _builder.newLine();
-            _builder.append("\t");
-            _builder.append("\t\t\t");
-            String _generateVars = GeneratorUtil.generateVars(varHelper, name);
-            _builder.append(_generateVars, "\t\t\t\t");
-            _builder.newLineIfNotEmpty();
-            _builder.append("\t");
-            _builder.append("\t\t");
-            _builder.append("</MixedAttrsVarList>");
-            _builder.newLine();
-            _builder.append("\t");
-            _builder.append("\t");
-            _builder.append("</data>");
-            _builder.newLine();
-            _builder.append("\t");
-            _builder.append("</addData>");
-            _builder.newLine();
-          }
-        }
-        _builder.append("</globalVars>");
-        _builder.newLine();
-      }
-    }
+    _builder.append("�IF !varHelper.list.empty�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("<globalVars name=\"�name�\">");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("�FOR v : varHelper.list�");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("�IF v.isConstant�");
+    _builder.newLine();
+    _builder.append("\t\t\t\t");
+    _builder.append("�v.generateSingleDeclaration�");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("�ENDIF���");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("�ENDFOR�");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("�IF varHelper.hasConstant�");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("<addData>");
+    _builder.newLine();
+    _builder.append("\t\t\t\t");
+    _builder.append("<data name=\"http://www.3s-software.com/plcopenxml/mixedattrsvarlist\" handleUnknown=\"implementation\">");
+    _builder.newLine();
+    _builder.append("\t\t\t\t\t");
+    _builder.append("<MixedAttrsVarList>");
+    _builder.newLine();
+    _builder.append("\t\t\t\t\t\t");
+    _builder.append("�varHelper.generateVars(name)�");
+    _builder.newLine();
+    _builder.append("\t\t\t\t\t");
+    _builder.append("</MixedAttrsVarList>");
+    _builder.newLine();
+    _builder.append("\t\t\t\t");
+    _builder.append("</data>");
+    _builder.newLine();
+    _builder.append("\t\t\t");
+    _builder.append("</addData>");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("�ENDIF�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("</globalVars>");
+    _builder.newLine();
+    _builder.append("�ENDIF�");
+    _builder.newLine();
     return _builder.toString();
   }
   
@@ -550,12 +438,7 @@ public class GeneratorUtil {
               return gArray.apply(((PrimaryExpression)exp).getArray());
             }
             StringConcatenation _builder = new StringConcatenation();
-            String _name = ((PrimaryExpression)exp).getArray().getVariable().getName();
-            _builder.append(_name);
-            _builder.append("[");
-            String _generateExpression = GeneratorUtil.generateExpression(((PrimaryExpression)exp).getArray().getIndex(), gVar, gArray, gPStatus);
-            _builder.append(_generateExpression);
-            _builder.append("]");
+            _builder.append("�exp.array.variable.name�[�exp.array.index.generateExpression(gVar, gArray, gPStatus)�]");
             return _builder.toString();
           } else {
             ProcessStatusExpression _procStatus = ((PrimaryExpression)exp).getProcStatus();
@@ -571,22 +454,11 @@ public class GeneratorUtil {
               boolean _tripleNotEquals_4 = (_funCall != null);
               if (_tripleNotEquals_4) {
                 StringConcatenation _builder_2 = new StringConcatenation();
-                String _name_1 = ((PrimaryExpression)exp).getFunCall().getFunction().getName();
-                _builder_2.append(_name_1);
-                _builder_2.append("(");
-                final Function<Expression, String> _function = (Expression x) -> {
-                  return GeneratorUtil.generateExpression(x, gVar, gArray, gPStatus);
-                };
-                String _generateParamAssignmentElements = GeneratorUtil.generateParamAssignmentElements(((PrimaryExpression)exp).getFunCall().getArgs(), _function);
-                _builder_2.append(_generateParamAssignmentElements);
-                _builder_2.append(")");
+                _builder_2.append("�exp.funCall.function.name�(�exp.funCall.args.generateParamAssignmentElements([x | x.generateExpression(gVar, gArray, gPStatus)])�)");
                 return _builder_2.toString();
               } else {
                 StringConcatenation _builder_3 = new StringConcatenation();
-                _builder_3.append("(");
-                String _generateExpression_1 = GeneratorUtil.generateExpression(((PrimaryExpression)exp).getNestExpr(), gVar, gArray, gPStatus);
-                _builder_3.append(_generateExpression_1);
-                _builder_3.append(")");
+                _builder_3.append("(�exp.nestExpr.generateExpression(gVar, gArray, gPStatus)�)");
                 return _builder_3.toString();
               }
             }
@@ -598,21 +470,7 @@ public class GeneratorUtil {
       if (exp instanceof UnaryExpression) {
         _matched=true;
         StringConcatenation _builder = new StringConcatenation();
-        {
-          UnaryOperator _unOp = ((UnaryExpression)exp).getUnOp();
-          boolean _equals = Objects.equal(_unOp, UnaryOperator.NOT);
-          if (_equals) {
-            _builder.append("NOT ");
-          } else {
-            UnaryOperator _unOp_1 = ((UnaryExpression)exp).getUnOp();
-            boolean _equals_1 = Objects.equal(_unOp_1, UnaryOperator.UNMINUS);
-            if (_equals_1) {
-              _builder.append("-");
-            }
-          }
-        }
-        String _generateExpression = GeneratorUtil.generateExpression(((UnaryExpression)exp).getRight(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression);
+        _builder.append("�IF exp.unOp == UnaryOperator.NOT�NOT �ELSEIF exp.unOp == UnaryOperator.UNMINUS�-�ENDIF��exp.right.generateExpression(gVar, gArray, gPStatus)�");
         return _builder.toString();
       }
     }
@@ -620,11 +478,7 @@ public class GeneratorUtil {
       if (exp instanceof PowerExpression) {
         _matched=true;
         StringConcatenation _builder = new StringConcatenation();
-        String _generateExpression = GeneratorUtil.generateExpression(((PowerExpression)exp).getLeft(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression);
-        _builder.append(" ** ");
-        String _generateExpression_1 = GeneratorUtil.generateExpression(((PowerExpression)exp).getRight(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression_1);
+        _builder.append("�exp.left.generateExpression(gVar, gArray, gPStatus)� ** �exp.right.generateExpression(gVar, gArray, gPStatus)�");
         return _builder.toString();
       }
     }
@@ -632,14 +486,7 @@ public class GeneratorUtil {
       if (exp instanceof MulExpression) {
         _matched=true;
         StringConcatenation _builder = new StringConcatenation();
-        String _generateExpression = GeneratorUtil.generateExpression(((MulExpression)exp).getLeft(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression);
-        _builder.append(" ");
-        String _generateMulOperators = GeneratorUtil.generateMulOperators(((MulExpression)exp).getMulOp());
-        _builder.append(_generateMulOperators);
-        _builder.append(" ");
-        String _generateExpression_1 = GeneratorUtil.generateExpression(((MulExpression)exp).getRight(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression_1);
+        _builder.append("�exp.left.generateExpression(gVar, gArray, gPStatus)� �exp.mulOp.generateMulOperators� �exp.right.generateExpression(gVar, gArray, gPStatus)�");
         return _builder.toString();
       }
     }
@@ -647,21 +494,7 @@ public class GeneratorUtil {
       if (exp instanceof AddExpression) {
         _matched=true;
         StringConcatenation _builder = new StringConcatenation();
-        String _generateExpression = GeneratorUtil.generateExpression(((AddExpression)exp).getLeft(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression);
-        _builder.append(" ");
-        {
-          AddOperator _addOp = ((AddExpression)exp).getAddOp();
-          boolean _equals = Objects.equal(_addOp, AddOperator.PLUS);
-          if (_equals) {
-            _builder.append("+");
-          } else {
-            _builder.append("-");
-          }
-        }
-        _builder.append(" ");
-        String _generateExpression_1 = GeneratorUtil.generateExpression(((AddExpression)exp).getRight(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression_1);
+        _builder.append("�exp.left.generateExpression(gVar, gArray, gPStatus)� �IF exp.addOp == AddOperator.PLUS�+�ELSE�-�ENDIF� �exp.right.generateExpression(gVar, gArray, gPStatus)�");
         return _builder.toString();
       }
     }
@@ -669,14 +502,7 @@ public class GeneratorUtil {
       if (exp instanceof EquExpression) {
         _matched=true;
         StringConcatenation _builder = new StringConcatenation();
-        String _generateExpression = GeneratorUtil.generateExpression(((EquExpression)exp).getLeft(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression);
-        _builder.append(" ");
-        String _generateEquOperators = GeneratorUtil.generateEquOperators(((EquExpression)exp).getEquOp());
-        _builder.append(_generateEquOperators);
-        _builder.append(" ");
-        String _generateExpression_1 = GeneratorUtil.generateExpression(((EquExpression)exp).getRight(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression_1);
+        _builder.append("�exp.left.generateExpression(gVar, gArray, gPStatus)� �exp.equOp.generateEquOperators� �exp.right.generateExpression(gVar, gArray, gPStatus)�");
         return _builder.toString();
       }
     }
@@ -684,21 +510,7 @@ public class GeneratorUtil {
       if (exp instanceof CompExpression) {
         _matched=true;
         StringConcatenation _builder = new StringConcatenation();
-        String _generateExpression = GeneratorUtil.generateExpression(((CompExpression)exp).getLeft(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression);
-        _builder.append(" ");
-        {
-          CompOperator _compOp = ((CompExpression)exp).getCompOp();
-          boolean _equals = Objects.equal(_compOp, CompOperator.EQUAL);
-          if (_equals) {
-            _builder.append("=");
-          } else {
-            _builder.append("<>");
-          }
-        }
-        _builder.append(" ");
-        String _generateExpression_1 = GeneratorUtil.generateExpression(((CompExpression)exp).getRight(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression_1);
+        _builder.append("�exp.left.generateExpression(gVar, gArray, gPStatus)� �IF exp.compOp == CompOperator.EQUAL�=�ELSE�<>�ENDIF� �exp.right.generateExpression(gVar, gArray, gPStatus)�");
         return _builder.toString();
       }
     }
@@ -706,11 +518,7 @@ public class GeneratorUtil {
       if (exp instanceof AndExpression) {
         _matched=true;
         StringConcatenation _builder = new StringConcatenation();
-        String _generateExpression = GeneratorUtil.generateExpression(((AndExpression)exp).getLeft(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression);
-        _builder.append(" AND ");
-        String _generateExpression_1 = GeneratorUtil.generateExpression(((AndExpression)exp).getRight(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression_1);
+        _builder.append("�exp.left.generateExpression(gVar, gArray, gPStatus)� AND �exp.right.generateExpression(gVar, gArray, gPStatus)�");
         return _builder.toString();
       }
     }
@@ -718,11 +526,7 @@ public class GeneratorUtil {
       if (exp instanceof XorExpression) {
         _matched=true;
         StringConcatenation _builder = new StringConcatenation();
-        String _generateExpression = GeneratorUtil.generateExpression(((XorExpression)exp).getLeft(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression);
-        _builder.append(" XOR ");
-        String _generateExpression_1 = GeneratorUtil.generateExpression(((XorExpression)exp).getRight(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression_1);
+        _builder.append("�exp.left.generateExpression(gVar, gArray, gPStatus)� XOR �exp.right.generateExpression(gVar, gArray, gPStatus)�");
         return _builder.toString();
       }
     }
@@ -730,11 +534,7 @@ public class GeneratorUtil {
       if (exp instanceof Expression) {
         _matched=true;
         StringConcatenation _builder = new StringConcatenation();
-        String _generateExpression = GeneratorUtil.generateExpression(exp.getLeft(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression);
-        _builder.append(" OR ");
-        String _generateExpression_1 = GeneratorUtil.generateExpression(exp.getRight(), gVar, gArray, gPStatus);
-        _builder.append(_generateExpression_1);
+        _builder.append("�exp.left.generateExpression(gVar, gArray, gPStatus)� OR �exp.right.generateExpression(gVar, gArray, gPStatus)�");
         return _builder.toString();
       }
     }
@@ -757,21 +557,7 @@ public class GeneratorUtil {
   
   private static String generateParamAssignment(final ParamAssignment ele, final Function<Expression, String> gExp) {
     StringConcatenation _builder = new StringConcatenation();
-    String _name = ele.getVariable().getName();
-    _builder.append(_name);
-    _builder.append(" ");
-    {
-      AssignmentType _assig = ele.getAssig();
-      boolean _equals = Objects.equal(_assig, AssignmentType.IN);
-      if (_equals) {
-        _builder.append(":=");
-      } else {
-        _builder.append("=>");
-      }
-    }
-    _builder.append(" ");
-    String _apply = gExp.apply(ele.getValue());
-    _builder.append(_apply);
+    _builder.append("�ele.variable.name� �IF ele.assig == AssignmentType.IN�:=�ELSE�=>�ENDIF� �gExp.apply(ele.value)�");
     return _builder.toString();
   }
   

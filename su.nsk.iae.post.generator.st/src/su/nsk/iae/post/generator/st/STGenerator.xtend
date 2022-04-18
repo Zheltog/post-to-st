@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
+import su.nsk.iae.post.IDsmExecutor
 import su.nsk.iae.post.generator.IPoSTGenerator
 import su.nsk.iae.post.generator.st.common.ProgramGenerator
 import su.nsk.iae.post.generator.st.common.vars.GlobalVarHelper
@@ -28,13 +29,20 @@ import su.nsk.iae.post.poST.Variable
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.xtext.EcoreUtil2.*
-import static extension su.nsk.iae.post.generator.st.common.util.GeneratorUtil.*
 
-class STGenerator implements IPoSTGenerator {
+class STGenerator implements IPoSTGenerator, IDsmExecutor {
 
 	ConfigurationGenerator configuration = null
 	VarHelper globVarList = new GlobalVarHelper
 	List<ProgramGenerator> programs = new LinkedList
+	
+	override String execute(Object request) {
+		var req = request as DsmRequestBody
+		return "'Executed' for request: " + req
+//		beforeGenerate(resource, fsa, context)
+//		doGenerate(resource, fsa, context)
+//		afterGenerate(resource, fsa, context)
+	}
 
 	override setModel(Model model) {
 		globVarList.clear()
@@ -64,25 +72,25 @@ class STGenerator implements IPoSTGenerator {
 	override afterGenerate(Resource input, IFileSystemAccess2 fsa, IGeneratorContext context) {}
 
 	private def void generateSingleFile(IFileSystemAccess2 fsa, String path) {
-		fsa.generateFile('''«path»poST_code.st''', generateSingleFileBody)
+		fsa.generateFile('''ï¿½pathï¿½poST_code.st''', generateSingleFileBody)
 	}
 
 //	private def void generateMultipleFiles(IFileSystemAccess2 fsa, String path) {
-//		fsa.generateFile('''«path»GVL.st''', ProgramGenerator.generateVar(globVarList))
+//		fsa.generateFile('''ï¿½pathï¿½GVL.st''', ProgramGenerator.generateVar(globVarList))
 //		for (c : programs) {
 //			c.generate(fsa, path, configuration === null)
 //		}
 //	}
 
 	private def String generateSingleFileBody() '''
-		«globVarList.generateVars»
-		«IF configuration !== null»
-			«configuration.generateConfiguration»
-		«ENDIF»
-		«FOR c : programs»
-			«c.generateProgram»
+		ï¿½globVarList.generateVarsï¿½
+		ï¿½IF configuration !== nullï¿½
+			ï¿½configuration.generateConfigurationï¿½
+		ï¿½ENDIFï¿½
+		ï¿½FOR c : programsï¿½
+			ï¿½c.generateProgramï¿½
 			
-		«ENDFOR»
+		ï¿½ENDFORï¿½
 	'''
 
 	private def void preparePrograms() {

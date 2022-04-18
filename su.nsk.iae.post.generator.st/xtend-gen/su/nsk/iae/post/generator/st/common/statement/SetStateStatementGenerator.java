@@ -23,16 +23,7 @@ public class SetStateStatementGenerator extends IStatementGenerator {
   public String generateStatement(final Statement statement) {
     final SetStateStatement s = ((SetStateStatement) statement);
     StringConcatenation _builder = new StringConcatenation();
-    {
-      boolean _isNext = s.isNext();
-      if (_isNext) {
-        String _generateNextState = this.process.generateNextState(this.state);
-        _builder.append(_generateNextState);
-      } else {
-        String _generateSetState = this.process.generateSetState(s.getState().getName());
-        _builder.append(_generateSetState);
-      }
-    }
+    _builder.append("�IF s.next��process.generateNextState(state)��ELSE��process.generateSetState(s.state.name)��ENDIF�");
     return _builder.toString();
   }
 }

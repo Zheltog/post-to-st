@@ -49,10 +49,7 @@ public class ProgramGenerator {
   
   public void generate(final IFileSystemAccess2 fsa, final String path) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append(path);
-    String _lowerCase = this.programName.toLowerCase();
-    _builder.append(_lowerCase);
-    _builder.append(".st");
+    _builder.append("�path��programName.toLowerCase�.st");
     fsa.generateFile(_builder.toString(), this.generateFullProgram());
   }
   
@@ -63,59 +60,47 @@ public class ProgramGenerator {
   
   public String generateFullProgram() {
     StringConcatenation _builder = new StringConcatenation();
-    String _generateXMLStart = GeneratorUtil.generateXMLStart();
-    _builder.append(_generateXMLStart);
-    _builder.newLineIfNotEmpty();
-    String _generateXMLBody = this.generateXMLBody();
-    _builder.append(_generateXMLBody);
-    _builder.newLineIfNotEmpty();
-    String _generateXMLEnd = GeneratorUtil.generateXMLEnd();
-    _builder.append(_generateXMLEnd);
-    _builder.newLineIfNotEmpty();
+    _builder.append("�generateXMLStart�");
+    _builder.newLine();
+    _builder.append("�generateXMLBody�");
+    _builder.newLine();
+    _builder.append("�generateXMLEnd�");
+    _builder.newLine();
     return _builder.toString();
   }
   
   private String generateXMLBody() {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("\t\t\t");
-    _builder.append("<pou name=\"");
-    _builder.append(this.programName, "\t\t\t");
-    _builder.append("\" pouType=\"");
-    String _lowerCase = this.type.toLowerCase();
-    _builder.append(_lowerCase, "\t\t\t");
-    _builder.append("\">");
-    _builder.newLineIfNotEmpty();
+    _builder.append("<pou name=\"�programName�\" pouType=\"�type.toLowerCase�\">");
+    _builder.newLine();
     _builder.append("\t\t\t\t");
     _builder.append("<interface>");
     _builder.newLine();
-    {
-      if ((!this.templateProcess)) {
-        _builder.append("\t\t\t\t\t");
-        String _generateVars = GeneratorUtil.generateVars(this.inVarList);
-        _builder.append(_generateVars, "\t\t\t\t\t");
-        _builder.newLineIfNotEmpty();
-        _builder.append("\t\t\t\t\t");
-        String _generateVars_1 = GeneratorUtil.generateVars(this.outVarList);
-        _builder.append(_generateVars_1, "\t\t\t\t\t");
-        _builder.newLineIfNotEmpty();
-        _builder.append("\t\t\t\t\t");
-        String _generateVars_2 = GeneratorUtil.generateVars(this.inOutVarList);
-        _builder.append(_generateVars_2, "\t\t\t\t\t");
-        _builder.newLineIfNotEmpty();
-      }
-    }
     _builder.append("\t\t\t\t\t");
-    String _generateVars_3 = GeneratorUtil.generateVars(this.externalVarList);
-    _builder.append(_generateVars_3, "\t\t\t\t\t");
-    _builder.newLineIfNotEmpty();
+    _builder.append("�IF !templateProcess�");
+    _builder.newLine();
+    _builder.append("\t\t\t\t\t\t");
+    _builder.append("�inVarList.generateVars�");
+    _builder.newLine();
+    _builder.append("\t\t\t\t\t\t");
+    _builder.append("�outVarList.generateVars�");
+    _builder.newLine();
+    _builder.append("\t\t\t\t\t\t");
+    _builder.append("�inOutVarList.generateVars�");
+    _builder.newLine();
     _builder.append("\t\t\t\t\t");
-    String _generateVars_4 = GeneratorUtil.generateVars(this.varList);
-    _builder.append(_generateVars_4, "\t\t\t\t\t");
-    _builder.newLineIfNotEmpty();
+    _builder.append("�ENDIF�");
+    _builder.newLine();
     _builder.append("\t\t\t\t\t");
-    String _generateVars_5 = GeneratorUtil.generateVars(this.tempVarList);
-    _builder.append(_generateVars_5, "\t\t\t\t\t");
-    _builder.newLineIfNotEmpty();
+    _builder.append("�externalVarList.generateVars�");
+    _builder.newLine();
+    _builder.append("\t\t\t\t\t");
+    _builder.append("�varList.generateVars�");
+    _builder.newLine();
+    _builder.append("\t\t\t\t\t");
+    _builder.append("�tempVarList.generateVars�");
+    _builder.newLine();
     _builder.append("\t\t\t\t");
     _builder.append("</interface>");
     _builder.newLine();
@@ -126,21 +111,19 @@ public class ProgramGenerator {
     _builder.append("<ST>");
     _builder.newLine();
     _builder.append("\t\t\t\t\t\t");
-    _builder.append("<xhtml xmlns=\"http://www.w3.org/1999/xhtml\">");
-    String _generateGlobalTime = GeneratorUtil.generateGlobalTime();
-    _builder.append(_generateGlobalTime, "\t\t\t\t\t\t");
-    _builder.append(" := TIME();");
-    _builder.newLineIfNotEmpty();
+    _builder.append("<xhtml xmlns=\"http://www.w3.org/1999/xhtml\">�generateGlobalTime� := TIME();");
+    _builder.newLine();
     _builder.append("\t");
     _builder.newLine();
-    {
-      for(final ProcessGenerator p : this.processList) {
-        String _generateBody = p.generateBody();
-        _builder.append(_generateBody);
-        _builder.newLineIfNotEmpty();
-        _builder.newLine();
-      }
-    }
+    _builder.append("�FOR p : processList�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�p.generateBody�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.newLine();
+    _builder.append("�ENDFOR�");
+    _builder.newLine();
     _builder.append("</xhtml>");
     _builder.newLine();
     _builder.append("\t\t\t\t\t");

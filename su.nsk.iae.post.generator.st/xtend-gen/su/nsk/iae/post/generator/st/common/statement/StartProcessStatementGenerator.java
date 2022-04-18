@@ -7,7 +7,6 @@ import su.nsk.iae.post.generator.st.common.StateGenerator;
 import su.nsk.iae.post.generator.st.common.StatementListGenerator;
 import su.nsk.iae.post.poST.StartProcessStatement;
 import su.nsk.iae.post.poST.Statement;
-import su.nsk.iae.post.poST.Variable;
 
 @SuppressWarnings("all")
 public class StartProcessStatementGenerator extends IStatementGenerator {
@@ -24,17 +23,7 @@ public class StartProcessStatementGenerator extends IStatementGenerator {
   public String generateStatement(final Statement statement) {
     final StartProcessStatement s = ((StartProcessStatement) statement);
     StringConcatenation _builder = new StringConcatenation();
-    {
-      Variable _process = s.getProcess();
-      boolean _tripleNotEquals = (_process != null);
-      if (_tripleNotEquals) {
-        String _generateProcessStart = this.program.generateProcessStart(s.getProcess().getName());
-        _builder.append(_generateProcessStart);
-      } else {
-        String _generateStart = this.process.generateStart();
-        _builder.append(_generateStart);
-      }
-    }
+    _builder.append("�IF s.process !== null��program.generateProcessStart(s.process.name)��ELSE��process.generateStart��ENDIF�");
     return _builder.toString();
   }
 }

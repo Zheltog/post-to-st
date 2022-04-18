@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 import org.eclipse.xtend2.lib.StringConcatenation;
-import su.nsk.iae.post.generator.st.common.util.GeneratorUtil;
 import su.nsk.iae.post.generator.st.common.vars.GlobalVarHelper;
 import su.nsk.iae.post.generator.st.common.vars.VarHelper;
 import su.nsk.iae.post.poST.GlobalVarDeclaration;
@@ -42,37 +41,33 @@ public class ResourceGenerator {
   
   public CharSequence generateResource() {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("RESOURCE ");
-    String _name = this.resource.getName();
-    _builder.append(_name);
-    _builder.append(" ON ");
-    String _type = this.resource.getType();
-    _builder.append(_type);
-    _builder.newLineIfNotEmpty();
+    _builder.append("RESOURCE �resource.name� ON �resource.type�");
+    _builder.newLine();
     _builder.append("\t");
     _builder.newLine();
     _builder.append("\t");
-    String _generateVars = GeneratorUtil.generateVars(this.resVarList);
-    _builder.append(_generateVars, "\t");
-    _builder.newLineIfNotEmpty();
-    {
-      for(final TaskGenerator t : this.tasks) {
-        _builder.append("\t");
-        String _generateTask = t.generateTask();
-        _builder.append(_generateTask, "\t");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("�resVarList.generateVars�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�FOR t : tasks�");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("�t.generateTask�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�ENDFOR�");
+    _builder.newLine();
     _builder.append("\t");
     _builder.newLine();
-    {
-      for(final ProgramConfigurationGenerator p : this.programConfigurationGenerators) {
-        _builder.append("\t");
-        String _generateProgramConfiguration = p.generateProgramConfiguration();
-        _builder.append(_generateProgramConfiguration, "\t");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("\t");
+    _builder.append("�FOR p : programConfigurationGenerators�");
+    _builder.newLine();
+    _builder.append("\t\t");
+    _builder.append("�p.generateProgramConfiguration�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�ENDFOR�");
+    _builder.newLine();
     _builder.append("\t");
     _builder.newLine();
     _builder.append("END_RESOURCE");

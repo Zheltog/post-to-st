@@ -5,10 +5,8 @@ import su.nsk.iae.post.generator.st.common.ProcessGenerator;
 import su.nsk.iae.post.generator.st.common.ProgramGenerator;
 import su.nsk.iae.post.generator.st.common.StateGenerator;
 import su.nsk.iae.post.generator.st.common.StatementListGenerator;
-import su.nsk.iae.post.generator.st.common.util.GeneratorUtil;
 import su.nsk.iae.post.poST.ErrorProcessStatement;
 import su.nsk.iae.post.poST.Statement;
-import su.nsk.iae.post.poST.Variable;
 
 @SuppressWarnings("all")
 public class ErrorProcessStatementGenerator extends IStatementGenerator {
@@ -25,21 +23,7 @@ public class ErrorProcessStatementGenerator extends IStatementGenerator {
   public String generateStatement(final Statement statement) {
     final ErrorProcessStatement s = ((ErrorProcessStatement) statement);
     StringConcatenation _builder = new StringConcatenation();
-    {
-      Variable _process = s.getProcess();
-      boolean _tripleNotEquals = (_process != null);
-      if (_tripleNotEquals) {
-        String _generateProcessEnum = this.program.generateProcessEnum(s.getProcess().getName());
-        _builder.append(_generateProcessEnum);
-      } else {
-        String _generateEnumName = GeneratorUtil.generateEnumName(this.process);
-        _builder.append(_generateEnumName);
-      }
-    }
-    _builder.append(" := ");
-    String _generateErrorConstant = GeneratorUtil.generateErrorConstant();
-    _builder.append(_generateErrorConstant);
-    _builder.append(";");
+    _builder.append("�IF s.process !== null��program.generateProcessEnum(s.process.name)��ELSE��process.generateEnumName��ENDIF� := �generateErrorConstant�;");
     return _builder.toString();
   }
 }

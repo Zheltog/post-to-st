@@ -14,9 +14,9 @@ import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
+import su.nsk.iae.post.IDsmExecutor;
 import su.nsk.iae.post.generator.IPoSTGenerator;
 import su.nsk.iae.post.generator.st.common.ProgramGenerator;
-import su.nsk.iae.post.generator.st.common.util.GeneratorUtil;
 import su.nsk.iae.post.generator.st.common.vars.GlobalVarHelper;
 import su.nsk.iae.post.generator.st.common.vars.VarHelper;
 import su.nsk.iae.post.generator.st.configuration.ConfigurationGenerator;
@@ -44,12 +44,18 @@ import su.nsk.iae.post.poST.TimeoutStatement;
 import su.nsk.iae.post.poST.Variable;
 
 @SuppressWarnings("all")
-public class STGenerator implements IPoSTGenerator {
+public class STGenerator implements IPoSTGenerator, IDsmExecutor {
   private ConfigurationGenerator configuration = null;
   
   private VarHelper globVarList = new GlobalVarHelper();
   
   private List<ProgramGenerator> programs = new LinkedList<ProgramGenerator>();
+  
+  @Override
+  public String execute(final Object request) {
+    DsmRequestBody req = ((DsmRequestBody) request);
+    return ("\'Executed\' for request: " + req);
+  }
   
   @Override
   public void setModel(final Model model) {
@@ -108,31 +114,30 @@ public class STGenerator implements IPoSTGenerator {
   
   private void generateSingleFile(final IFileSystemAccess2 fsa, final String path) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append(path);
-    _builder.append("poST_code.st");
+    _builder.append("�path�poST_code.st");
     fsa.generateFile(_builder.toString(), this.generateSingleFileBody());
   }
   
   private String generateSingleFileBody() {
     StringConcatenation _builder = new StringConcatenation();
-    String _generateVars = GeneratorUtil.generateVars(this.globVarList);
-    _builder.append(_generateVars);
-    _builder.newLineIfNotEmpty();
-    {
-      if ((this.configuration != null)) {
-        String _generateConfiguration = this.configuration.generateConfiguration();
-        _builder.append(_generateConfiguration);
-        _builder.newLineIfNotEmpty();
-      }
-    }
-    {
-      for(final ProgramGenerator c : this.programs) {
-        String _generateProgram = c.generateProgram();
-        _builder.append(_generateProgram);
-        _builder.newLineIfNotEmpty();
-        _builder.newLine();
-      }
-    }
+    _builder.append("�globVarList.generateVars�");
+    _builder.newLine();
+    _builder.append("�IF configuration !== null�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�configuration.generateConfiguration�");
+    _builder.newLine();
+    _builder.append("�ENDIF�");
+    _builder.newLine();
+    _builder.append("�FOR c : programs�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("�c.generateProgram�");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.newLine();
+    _builder.append("�ENDFOR�");
+    _builder.newLine();
     return _builder.toString();
   }
   
