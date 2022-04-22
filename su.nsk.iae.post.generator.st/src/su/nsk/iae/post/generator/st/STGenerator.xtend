@@ -12,7 +12,7 @@ import org.eclipse.xtext.generator.JavaIoFileSystemAccess
 import com.google.inject.Injector
 import su.nsk.iae.post.IDsmExecutor
 import su.nsk.iae.post.PoSTStandaloneSetup
-//import su.nsk.iae.post.deserialization.ModelDeserializer
+import su.nsk.iae.post.deserialization.ModelDeserializer
 import su.nsk.iae.post.generator.IPoSTGenerator
 import su.nsk.iae.post.generator.st.common.ProgramGenerator
 import su.nsk.iae.post.generator.st.common.vars.GlobalVarHelper
@@ -44,10 +44,10 @@ class STGenerator implements IPoSTGenerator, IDsmExecutor {
 	List<ProgramGenerator> programs = new LinkedList
 	
 	override String execute(LinkedHashMap<String, Object> request) {
-		var id = request.get("id")
-		var root = request.get("root")
-		var fileName = request.get("fileName")
-		var ast = request.get("ast")
+		var id = request.get("id") as String
+		var root = request.get("root") as String
+		var fileName = request.get("fileName") as String
+		var ast = request.get("ast") as String
 		
 		System.out.println("id = " + id)
 		System.out.println("root = " + root)
@@ -56,8 +56,7 @@ class STGenerator implements IPoSTGenerator, IDsmExecutor {
 
 		var Injector injector = PoSTStandaloneSetup.getInjector()
 		var JavaIoFileSystemAccess fsa = injector.getInstance(typeof(JavaIoFileSystemAccess))
-//		var Resource resource = ModelDeserializer.deserializeFromXMI(ast)
-		var Resource resource = null
+		var Resource resource = ModelDeserializer.deserializeFromXMI(ast)
 		var IGeneratorContext context = new NullGeneratorContext()
 		var String generated = root + File.separator + DSM_DIRECTORY + File.separator + fileName
 		fsa.setOutputPath(generated)

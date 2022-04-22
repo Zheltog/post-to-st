@@ -21,6 +21,7 @@ import org.eclipse.xtext.generator.IGeneratorContext;
 import org.eclipse.xtext.generator.JavaIoFileSystemAccess;
 import su.nsk.iae.post.IDsmExecutor;
 import su.nsk.iae.post.PoSTStandaloneSetup;
+import su.nsk.iae.post.deserialization.ModelDeserializer;
 import su.nsk.iae.post.generator.IPoSTGenerator;
 import su.nsk.iae.post.generator.st.common.ProgramGenerator;
 import su.nsk.iae.post.generator.st.common.vars.GlobalVarHelper;
@@ -60,22 +61,23 @@ public class STGenerator implements IPoSTGenerator, IDsmExecutor {
   
   @Override
   public String execute(final LinkedHashMap<String, Object> request) {
-    Object id = request.get("id");
-    Object root = request.get("root");
-    Object fileName = request.get("fileName");
-    Object ast = request.get("ast");
+    Object _get = request.get("id");
+    String id = ((String) _get);
+    Object _get_1 = request.get("root");
+    String root = ((String) _get_1);
+    Object _get_2 = request.get("fileName");
+    String fileName = ((String) _get_2);
+    Object _get_3 = request.get("ast");
+    String ast = ((String) _get_3);
     System.out.println(("id = " + id));
     System.out.println(("root = " + root));
     System.out.println(("fileName = " + fileName));
     System.out.println(("ast = " + ast));
     Injector injector = PoSTStandaloneSetup.getInjector();
     JavaIoFileSystemAccess fsa = injector.<JavaIoFileSystemAccess>getInstance(JavaIoFileSystemAccess.class);
-    Resource resource = null;
+    Resource resource = ModelDeserializer.deserializeFromXMI(ast);
     IGeneratorContext context = new NullGeneratorContext();
-    String _plus = (root + File.separator);
-    String _plus_1 = (_plus + this.DSM_DIRECTORY);
-    String _plus_2 = (_plus_1 + File.separator);
-    String generated = (_plus_2 + fileName);
+    String generated = ((((root + File.separator) + this.DSM_DIRECTORY) + File.separator) + fileName);
     fsa.setOutputPath(generated);
     this.beforeGenerate(resource, fsa, context);
     this.doGenerate(resource, fsa, context);
